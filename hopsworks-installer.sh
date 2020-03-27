@@ -28,7 +28,7 @@
 ###################################################################################################
 
 HOPSWORKS_BRANCH=master
-CLUSTER_DEFINITION_BRANCH=https://raw.githubusercontent.com/logicalclocks/karamel-chef/moritz
+CLUSTER_DEFINITION_BRANCH=https://raw.githubusercontent.com/jimdowling/karamel-chef/
 KARAMEL_VERSION=0.6
 INSTALL_ACTION=
 NON_INTERACT=0

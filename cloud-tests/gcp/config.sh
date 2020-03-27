@@ -8,8 +8,8 @@ CLUSTER_DEFINITION_BRANCH=$(grep ^CLUSTER_DEFINITION_BRANCH ../../hopsworks-inst
 GCP_USER=$USER
 #PROJECT=hazel-charter-222806
 PROJECT=dpe-cloud-mle
-ZONE=us-east1-b
-REGION=us-east1
+ZONE=us-central1-b
+REGION=us-central1
 
 gcloud config set core/project $PROJECT > /dev/null 2>&1
 gcloud config set compute/zone $ZONE > /dev/null 2>&1
