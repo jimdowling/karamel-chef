@@ -19,6 +19,7 @@ attrs:
     tls:
       enabled: __TLS__
     cgroups: true
+    gpu: true
     __YARN__
       vcores: __CPUS__
       memory_mbs: __MEM__
@@ -27,6 +28,11 @@ attrs:
       actor_class: "org.apache.hadoop.yarn.server.resourcemanager.security.DevHopsworksRMAppSecurityActions"
   kagent:
     python_conda_versions: 3.6
+  conda:
+    hops-util-py:
+      install-mode: "git"
+      branch: "zenuity"
+      repo: "robzor92"
   alertmanager:
     email:
       to: sre@logicalclocks.com
