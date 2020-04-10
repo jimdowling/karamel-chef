@@ -29,7 +29,7 @@
 
 HOPSWORKS_REPO=robzor92/hopsworks-chef
 HOPSWORKS_BRANCH=1.2-hadoop3
-CLUSTER_DEFINITION_BRANCH=https://raw.githubusercontent.com/jimdowling/tf2
+CLUSTER_DEFINITION_BRANCH=https://raw.githubusercontent.com/jimdowling/karamel-chef/tf2
 KARAMEL_VERSION=0.6
 INSTALL_ACTION=
 NON_INTERACT=0
