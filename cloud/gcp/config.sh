@@ -9,11 +9,7 @@ CLOUD=gcp
 GCP_USER=$USER
 #PROJECT=hazel-charter-222806
 PROJECT=dpe-cloud-mle
-<<<<<<< HEAD
-ZONE=us-central1-b
-=======
 ZONE=us-central1-a
->>>>>>> 214a6788989a43dd89e37cc64bfb4466cad58fb8
 REGION=us-central1
 
 gcloud config set core/project $PROJECT > /dev/null 2>&1
