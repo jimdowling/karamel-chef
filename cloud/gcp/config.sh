@@ -2,13 +2,18 @@
 
 script=$1
 NAME=${script:0:3}
-BRANCH=$(grep ^HOPSWORKS_BRANCH ../../hopsworks-installer.sh | sed -e 's/HOPSWORKS_BRANCH=//g')
+BRANCH=$(grep ^HOPSWORKS_CHEF_GITHUB_BRANCH ../../hopsworks-installer.sh | sed -e 's/HOPSWORKS_CHEF_GITHUB_BRANCH=//g')
 CLUSTER_DEFINITION_BRANCH=$(grep ^CLUSTER_DEFINITION_BRANCH ../../hopsworks-installer.sh | sed -e 's/CLUSTER_DEFINITION_BRANCH=//g')
 
+CLOUD=gcp
 GCP_USER=$USER
 #PROJECT=hazel-charter-222806
 PROJECT=dpe-cloud-mle
+<<<<<<< HEAD
 ZONE=us-central1-b
+=======
+ZONE=us-central1-a
+>>>>>>> 214a6788989a43dd89e37cc64bfb4466cad58fb8
 REGION=us-central1
 
 gcloud config set core/project $PROJECT > /dev/null 2>&1
@@ -31,6 +36,8 @@ BOOT_DISK=pd-ssd
 RESERVATION_AFFINITY=any
 #SHIELD="--no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring"
 SHIELD=""
+GPU=nvidia-tesla-v100
+NUM_GPUS_PER_VM=1
 
 MACHINE_TYPE=n1-standard-8
 IMAGE=centos-7-v20200309

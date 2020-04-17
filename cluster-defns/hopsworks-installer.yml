@@ -4,12 +4,12 @@ baremetal:
 
 cookbooks:
   hopsworks:
-    github: logicalclocks/hopsworks-chef
+    github: __GITHUB__
     branch: __BRANCH__
 
 attrs:
-  maggy:
-    version: git+https://github.com/jimdowling/maggy@branchname
+#  maggy:
+#    version: git+https://github.com/jimdowling/maggy@
   __DOWNLOAD__
   install:
     dir: /srv/hops
@@ -24,6 +24,7 @@ attrs:
     __YARN__
       vcores: __CPUS__
       memory_mbs: __MEM__
+      detect-hardware-capabilities: false
     rmappsecurity:
       actor_class: "org.apache.hadoop.yarn.server.resourcemanager.security.DevHopsworksRMAppSecurityActions"
   kagent:
@@ -116,4 +117,6 @@ groups:
       - hopsmonitor::alertmanager
       - hopsmonitor::node_exporter
       - hopsmonitor::purge_telegraf
+      - consul
+      - consul::master      
       __KUBERNETES_RECIPES__

@@ -68,7 +68,9 @@ else
 	echo "Error. You need to set the environment variable \$DOWNLOAD_URL to the URL for the enterprise binaries."
 	echo ""
 	echo "You can re-run this command with the 'community' switch to install community Hopsworks. For example: "
-	echo "./install gpu community"
+	echo "./install.sh gpu community"
+	echo "or"
+	echo "./install.sh cpu community"	
 	echo ""	
 	exit 3
     fi
@@ -104,7 +106,7 @@ fi
 
 
 echo "Installing installer on $IP"
-ssh -t -o StrictHostKeyChecking=no $IP "wget -nc ${CLUSTER_DEFINITION_BRANCH}/${BRANCH}/hopsworks-installer.sh && chmod +x hopsworks-installer.sh"
+ssh -t -o StrictHostKeyChecking=no $IP "wget -nc ${CLUSTER_DEFINITION_BRANCH}/hopsworks-installer.sh && chmod +x hopsworks-installer.sh"
 
 if [ $? -ne 0 ] ; then
     echo "Problem installing installer. Exiting..."
@@ -163,8 +165,8 @@ if [ "$DOWNLOAD_URL" != "" ] ; then
   DOWNLOAD="-d $DOWNLOAD_URL"
 fi
 echo
-echo "ssh -t -o StrictHostKeyChecking=no $IP "/home/$USER/hopsworks-installer.sh -i $HOPSWORKS_VERSION -ni -c gcp $DOWNLOAD $WORKERS && sleep 5""
-ssh -t -o StrictHostKeyChecking=no $IP "/home/$USER/hopsworks-installer.sh -i $HOPSWORKS_VERSION -ni -c gcp $DOWNLOAD $WORKERS && sleep 5"
+echo "ssh -t -o StrictHostKeyChecking=no $IP "/home/$USER/hopsworks-installer.sh -i $HOPSWORKS_VERSION -ni -c $CLOUD $DOWNLOAD $WORKERS && sleep 5""
+ssh -t -o StrictHostKeyChecking=no $IP "/home/$USER/hopsworks-installer.sh -i $HOPSWORKS_VERSION -ni -c $CLOUD $DOWNLOAD $WORKERS && sleep 5"
 
 if [ $? -ne 0 ] ; then
     echo "Problem running installer. Exiting..."
@@ -177,7 +179,6 @@ echo "*                                      *"
 echo "* Public IP access to Hopsworks at:    *"
 echo "*   https://${IP}/hopsworks    *"
 echo "*                                      *"
-echo "* View nstallation progress:           *"
-echo "*   ssh ${IP}                  *"
-echo "*   tail -f installation.log           *"
+echo "* View installation progress:          *"
+echo " ssh ${IP} \"tail -f installation.log\"   "
 echo "****************************************"

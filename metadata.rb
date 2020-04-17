@@ -13,12 +13,21 @@ issues_url       "https://github.com/hopshadoop/karamel-chef/issues"
   supports os
 end
 
-depends 'java'
-depends 'hostsfile'
-depends 'nodejs'
 depends 'hops'
+depends 'kagent'
+depends 'ndb'
+depends 'conda'
+depends 'kzookeeper'
 depends 'elastic'
 depends 'hopslog'
+depends 'kkafka'
+
+depends 'java', '~> 7.0.0'
+depends 'magic_shell', '~> 1.0.0'
+depends 'hostsfile', '~> 2.4.5'
+depends 'nodejs', '~> 6.0.0'
+depends 'sysctl', '~> 1.0.3'
+depends 'cmake', '~> 0.3.0'
 
 recipe  "karamel::install", "Installs Karamel"
 recipe  "karamel::default", "Configures and starts karamel."

@@ -1,18 +1,39 @@
 case node['platform']
 when 'ubuntu'
-  package ['bundler', 'firefox', 'libappindicator3-1', 'fonts-liberation', 'libxss1', 'xdg-utils']
+  package ['bundler', 'firefox', 'libappindicator3-1', 'fonts-liberation', 'libxss1', 'xdg-utils', 'libreadline-dev', 'zlib1g-dev', 'libgbm1', 'libnspr4', 'libnss3']
   # We are going to install ruby 2.5 using RVM (Ruby version manage)
+  template "/tmp/rbenv_install.sh" do
+    source "rbenv_install.erb"
+    owner "vagrant"
+    group "vagrant"
+    mode 0755
+    variables({
+    })
+  end
+  template "/tmp/rbenv_check.sh" do
+    source "rbenv_check.erb"
+    owner "vagrant"
+    group "vagrant"
+    mode 0755
+    variables({
+    })
+  end
   bash "install_ruby_25" do
     user "root"
     group "root"
     retries 5
     code <<-EOH
       # https://linuxize.com/post/how-to-install-ruby-on-ubuntu-18-04/
-      gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-      curl -sSL https://get.rvm.io | bash -s stable
-      source /etc/profile.d/rvm.sh
-      rvm install 2.5.1
-      rvm use 2.5.1 --default
+      # split the install script into install and check so it doesn't return error codes when partially installed
+      /tmp/rbenv_install.sh
+      #we don't source the .bashrc in here
+      export PATH="$HOME/.rbenv/bin:$PATH"
+      echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+      eval "$(rbenv init -)"
+      echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+      /tmp/rbenv_check.sh
+      rbenv install 2.5.1
+      rbenv global 2.5.1
     EOH
   end
 
@@ -44,6 +65,8 @@ when 'centos'
       # https://linuxize.com/post/how-to-install-ruby-on-centos-7/
       yum -y install curl gpg gcc gcc-c++ make patch autoconf automake bison libffi-devel libtool patch readline-devel sqlite-devel zlib-devel openssl-devel
       gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+      curl -sSL https://rvm.io/mpapis.asc | sudo gpg2 --import -
+      curl -sSL https://rvm.io/pkuczynski.asc | sudo gpg2 --import -
       curl -sSL https://get.rvm.io | bash -s stable
       source /etc/profile.d/rvm.sh
       rvm install 2.5.1
@@ -58,15 +81,24 @@ elastic_user="#{node['elastic']['opendistro_security']['admin']['username']}"
 elastic_pass="#{node['elastic']['opendistro_security']['admin']['password']}"
 kibana_endpoint="#{node[:karamel][:default][:private_ips][0]}:#{node[:kibana][:port]}"
 
+elastic_multinode='centos'
+elastic_singlenode='ubuntu'
+
+if node['test']['community']
+  elastic_multinode='ubuntu'
+  elastic_singlenode='centos'
+end
+
 case node['platform']
-when 'ubuntu'
+when elastic_multinode
   elastic_endpoint="#{node[:karamel][:default][:private_ips][2]}:#{node[:elastic][:port]}"
   my_ip = node[:karamel][:default][:private_ips][0]
   epipe_host = "#{node[:karamel][:default][:private_ips][1]}"
-when 'centos'
-  elastic_endpoint="#{node[:karamel][:default][:private_ips][0]}:#{node[:elastic][:port]}"
-  my_ip = node[:karamel][:default][:private_ips][0]
-  epipe_host = "#{node[:karamel][:default][:private_ips][0]}"
+
+when elastic_singlenode
+elastic_endpoint="#{node[:karamel][:default][:private_ips][0]}:#{node[:elastic][:port]}"
+my_ip = node[:karamel][:default][:private_ips][0]
+epipe_host = "#{node[:karamel][:default][:private_ips][0]}"
 end
 
 # Copy the environment configuration in the test directory
